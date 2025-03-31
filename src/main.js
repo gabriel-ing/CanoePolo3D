@@ -25,7 +25,8 @@ let currentState = 0;
 let pitchWidth = 30;
 let pitchHeight = 15;
 
-let sessionStates = sessionStorage.getItem("states");
+let sessionStates = JSON.parse(sessionStorage.getItem("states"));
+console.log(sessionStates);
 if (sessionStates) {
   window.states = scaleData(sessionStates, pitchWidth, pitchHeight);
 } else {
