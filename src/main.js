@@ -100,9 +100,9 @@ function animateToNextState(object, objStates, ball = false) {
     return;
   }
   // // console.log(object.id)
-  if (ball) {
-    console.log(object, currentState);
-  }
+  // if (ball) {
+  //   console.log(object, currentState);
+  // }
   let [positionState, rotationState] = objStates[currentState];
   speed = 10000 / guiSettings.animationSpeed;
   const tweenPosition = new Tween(object.mesh.position)
@@ -119,7 +119,7 @@ function animateToNextState(object, objStates, ball = false) {
   const tweenRotation = new Tween(object.mesh.rotation)
     .to(rotationState, speed)
     .onComplete(() => {
-      console.log("complete");
+      // console.log("complete");
       animateToNextState(object, objStates, ball);
     })
     .onUpdate(() => {})
@@ -245,7 +245,7 @@ function createAnimation() {
   const ballStates = window.states.ballStates.map((d) => [
     { x: d.x, y: 0.5, z: d.y },
   ]);
-  console.log("ballStates", ballStates);
+  // console.log("ballStates", ballStates);
   animateToNextState(ball, ballStates, true);
   for (let i = 0; i < 10; i++) {
     const boatStates = window.states.boatStates.map((d) => [
