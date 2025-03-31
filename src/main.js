@@ -1,11 +1,10 @@
 import * as THREE from "three";
 import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js";
-import { states } from "./states";
+import { demoStates } from "./states";
 import { Group, Tween } from "@tweenjs/tween.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { loadPositions, scaleData} from "./loadPositions";
-
+import { loadPositions, scaleData } from "./loadPositions";
 
 let scene, camera, renderer, gui;
 let pitch, tween, controls, ball;
@@ -25,7 +24,13 @@ let scale = 0.02;
 let currentState = 0;
 let pitchWidth = 30;
 let pitchHeight = 15;
-window.states = scaleData(states, pitchWidth, pitchHeight);
+
+let sessionStates = sessionStorage.getItem("states");
+if (sessionStates) {
+  window.states = scaleData(sessionStates, pitchWidth, pitchHeight);
+} else {
+  window.states = scaleData(demoStates, pitchWidth, pitchHeight);
+}
 let initialStates = window.states.boatStates[currentState];
 
 document
@@ -167,7 +172,7 @@ function createBall() {
   const ballMesh = new THREE.Mesh(ballGeo, ballMat);
   ballMesh.position.set(
     window.states.ballStates[0].x * scale,
-    2,
+    4,
     window.states.ballStates[0].y * scale
   );
   scene.add(ballMesh);
@@ -243,7 +248,7 @@ function updateCamera(boatNumber) {
 function createAnimation() {
   console.log(window.states);
   const ballStates = window.states.ballStates.map((d) => [
-    { x: d.x, y: 0.5, z: d.y },
+    { x: d.x, y: 1, z: d.y },
   ]);
   // console.log("ballStates", ballStates);
   animateToNextState(ball, ballStates, true);

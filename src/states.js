@@ -1,4 +1,4 @@
-export const states = {
+export const demoStates = {
   boatStates: [
     [
       {
