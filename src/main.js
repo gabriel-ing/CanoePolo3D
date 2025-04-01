@@ -17,6 +17,11 @@ let guiSettings = {
   "Upload File": () => {
     document.getElementById("animation-file-input").click();
   },
+  "Return to whiteboard": () => {
+    const whiteboardLink = document.createElement("a");
+    whiteboardLink.href = "https://gabriel-ing.github.io/CanoePoloWhiteboard/";
+    whiteboardLink.click();
+  },
 };
 let animating, animationCounter;
 let speed = 10000 / guiSettings.animationSpeed;
@@ -87,6 +92,7 @@ function init() {
   gui.add(guiSettings, "animationSpeed", 1, 20, 1);
   gui.add(guiSettings, "Reset");
   gui.add(guiSettings, "Upload File");
+  gui.add(guiSettings, "Return to whiteboard");
   const directionalLight = new THREE.DirectionalLight("#ffffff", 1);
   directionalLight.position.y = 30;
   directionalLight.target = pitch;
@@ -110,7 +116,11 @@ function animateToNextState(object, objStates, ball = false) {
   //   console.log(object, currentState);
   // }
   let [positionState, rotationState] = objStates[currentState];
-  speed = 10000 / guiSettings.animationSpeed;
+  if (currentState != 0) {
+    speed = 10000 / guiSettings.animationSpeed;
+  } else {
+    speed = 1;
+  }
   const tweenPosition = new Tween(object.mesh.position)
     .to(positionState, speed)
     .onComplete(() => {
@@ -160,8 +170,8 @@ function createPitch() {
   const goalMat = new THREE.MeshStandardMaterial({ map: goalTexture });
   const goal1 = new THREE.Mesh(goalGeo, goalMat);
   const goal2 = new THREE.Mesh(goalGeo, goalMat);
-  goal1.position.set(0, 3, pitchHeight / 2);
-  goal2.position.set(pitchWidth, 3, pitchHeight / 2);
+  goal1.position.set(0, 1.5, pitchHeight / 2);
+  goal2.position.set(pitchWidth, 1.5, pitchHeight / 2);
 
   scene.add(goal1);
   scene.add(goal2);
@@ -249,7 +259,7 @@ function updateCamera(boatNumber) {
 function createAnimation() {
   console.log(window.states);
   const ballStates = window.states.ballStates.map((d) => [
-    { x: d.x, y: 1, z: d.y },
+    { x: d.x, y: 1.2, z: d.y },
   ]);
   // console.log("ballStates", ballStates);
   animateToNextState(ball, ballStates, true);
