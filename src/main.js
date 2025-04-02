@@ -27,8 +27,8 @@ let animating, animationCounter;
 let speed = 10000 / guiSettings.animationSpeed;
 let scale = 0.02;
 let currentState = 0;
-let pitchWidth = 30;
-let pitchHeight = 15;
+let pitchWidth = 35;
+let pitchHeight = 23;
 
 let sessionStates = JSON.parse(sessionStorage.getItem("states"));
 console.log(sessionStates);
@@ -146,7 +146,7 @@ function animateToNextState(object, objStates, ball = false) {
 }
 function createPitch() {
   const texture = new THREE.TextureLoader().load(
-    "Textures/AdobeStock_154153098_Preview.jpeg"
+    "Textures/beautiful-shot-rippling-crystal-blue-water-background.jpg"
   );
 
   // Note because I have been working on a 2D plane width is the long axis and height is the short axis
@@ -172,9 +172,46 @@ function createPitch() {
   const goal2 = new THREE.Mesh(goalGeo, goalMat);
   goal1.position.set(0, 1.5, pitchHeight / 2);
   goal2.position.set(pitchWidth, 1.5, pitchHeight / 2);
-
   scene.add(goal1);
   scene.add(goal2);
+
+  const endWallGeo = new THREE.BoxGeometry(0.1, 6, pitchHeight+0.4);
+  const sideWallGeo = new THREE.BoxGeometry(pitchWidth+0.4, 6, 0.2);
+  const wallMat = new THREE.MeshStandardMaterial({
+    color: "#19314d",
+    opacity: 0.1,
+    transparent:true,
+  });
+
+  const backWall = new THREE.Mesh(endWallGeo, wallMat);
+  const frontWall = new THREE.Mesh(endWallGeo, wallMat);
+  const leftWall = new THREE.Mesh(sideWallGeo, wallMat);
+  const rightWall = new THREE.Mesh(sideWallGeo, wallMat);
+
+  backWall.position.set(pitchWidth + 0.4, 0, pitchHeight / 2);
+  frontWall.position.set(-0.4, 0, pitchHeight / 2);
+  rightWall.position.set((pitchWidth+0.4)/2, 0, pitchHeight);
+  leftWall.position.set((pitchWidth+0.4)/2, 0, 0);
+
+  // backWall.rotateX(Math.pi/4)
+  scene.add(backWall);
+  scene.add(frontWall);
+  scene.add(leftWall);
+  scene.add(rightWall);
+
+  const sectorLineGeo =  new THREE.BoxGeometry(0.05, 0.1, pitchHeight)
+  const sectorlineMat = new THREE.MeshStandardMaterial({color: "#cc6695"})
+  const sectorLineFront = new THREE.Mesh(sectorLineGeo, sectorlineMat)
+  sectorLineFront.position.set(6,0, pitchHeight/2)
+  const sectorLineBack = new THREE.Mesh(sectorLineGeo, sectorlineMat)
+  sectorLineBack.position.set(pitchWidth-6,0, pitchHeight/2)
+  scene.add(sectorLineFront)
+  scene.add(sectorLineBack)
+
+  const middleLineMat = new THREE.MeshStandardMaterial({color: "black"})
+  const middleLine = new THREE.Mesh(sectorLineGeo, middleLineMat)
+  middleLine.position.set(pitchWidth/2, 0, pitchHeight/2)
+  scene.add(middleLine)
 }
 function createBall() {
   // console.log(ballStates)
@@ -195,8 +232,8 @@ function createBoat(state) {
   const shape = new THREE.Shape();
   let x = 0;
   const y = 0;
-  const w = 1;
-  const h = 2.5;
+  const w = 0.5;
+  const h = 1.5;
   shape.moveTo(x - w / 2, y);
   shape.bezierCurveTo(x - w / 2, y, x - w / 4, y + h, x - w / 4, y + h);
   shape.bezierCurveTo(x - w / 4, y + h, x, y + h + h * 0.1, x + w / 4, y + h);
@@ -209,7 +246,7 @@ function createBoat(state) {
 
   const boatGeo = new THREE.ExtrudeGeometry(shape, {
     steps: 2,
-    depth: 0.5,
+    depth: 0.2,
     bevelEnabled: true,
     bevelThickness: 0.1,
     bevelSize: 0.1,
@@ -218,10 +255,10 @@ function createBoat(state) {
   });
 
   const mat = new THREE.MeshPhongMaterial({
-    color: state.color,
+    color: state.color==="#b2e6ce"? "#66cc9d" : "#cc9d66",
     precision: "highp",
   });
-  const personCapGeo = new THREE.CapsuleGeometry(0.3, 0.6, 1.5);
+  const personCapGeo = new THREE.CapsuleGeometry(0.3, 0.3, 1.5);
   personCapGeo.rotateX(-Math.PI / 2);
   // const personCap  =new THREE.Mesh(personCapGeo)
   // const boatMesh = new THREE.Mesh(boatGeo);

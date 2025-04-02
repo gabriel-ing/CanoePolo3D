@@ -47959,8 +47959,8 @@ void main() {
 	let speed = 10000 / guiSettings.animationSpeed;
 	let scale = 0.02;
 	let currentState = 0;
-	let pitchWidth = 30;
-	let pitchHeight = 15;
+	let pitchWidth = 35;
+	let pitchHeight = 23;
 
 	let sessionStates = JSON.parse(sessionStorage.getItem("states"));
 	console.log(sessionStates);
@@ -48077,7 +48077,7 @@ void main() {
 	}
 	function createPitch() {
 	  const texture = new TextureLoader().load(
-	    "Textures/AdobeStock_154153098_Preview.jpeg"
+	    "Textures/beautiful-shot-rippling-crystal-blue-water-background.jpg"
 	  );
 
 	  // Note because I have been working on a 2D plane width is the long axis and height is the short axis
@@ -48103,9 +48103,46 @@ void main() {
 	  const goal2 = new Mesh(goalGeo, goalMat);
 	  goal1.position.set(0, 1.5, pitchHeight / 2);
 	  goal2.position.set(pitchWidth, 1.5, pitchHeight / 2);
-
 	  scene.add(goal1);
 	  scene.add(goal2);
+
+	  const endWallGeo = new BoxGeometry(0.1, 6, pitchHeight+0.4);
+	  const sideWallGeo = new BoxGeometry(pitchWidth+0.4, 6, 0.2);
+	  const wallMat = new MeshStandardMaterial({
+	    color: "#19314d",
+	    opacity: 0.1,
+	    transparent:true,
+	  });
+
+	  const backWall = new Mesh(endWallGeo, wallMat);
+	  const frontWall = new Mesh(endWallGeo, wallMat);
+	  const leftWall = new Mesh(sideWallGeo, wallMat);
+	  const rightWall = new Mesh(sideWallGeo, wallMat);
+
+	  backWall.position.set(pitchWidth + 0.4, 0, pitchHeight / 2);
+	  frontWall.position.set(-0.4, 0, pitchHeight / 2);
+	  rightWall.position.set((pitchWidth+0.4)/2, 0, pitchHeight);
+	  leftWall.position.set((pitchWidth+0.4)/2, 0, 0);
+
+	  // backWall.rotateX(Math.pi/4)
+	  scene.add(backWall);
+	  scene.add(frontWall);
+	  scene.add(leftWall);
+	  scene.add(rightWall);
+
+	  const sectorLineGeo =  new BoxGeometry(0.05, 0.1, pitchHeight);
+	  const sectorlineMat = new MeshStandardMaterial({color: "#cc6695"});
+	  const sectorLineFront = new Mesh(sectorLineGeo, sectorlineMat);
+	  sectorLineFront.position.set(6,0, pitchHeight/2);
+	  const sectorLineBack = new Mesh(sectorLineGeo, sectorlineMat);
+	  sectorLineBack.position.set(pitchWidth-6,0, pitchHeight/2);
+	  scene.add(sectorLineFront);
+	  scene.add(sectorLineBack);
+
+	  const middleLineMat = new MeshStandardMaterial({color: "black"});
+	  const middleLine = new Mesh(sectorLineGeo, middleLineMat);
+	  middleLine.position.set(pitchWidth/2, 0, pitchHeight/2);
+	  scene.add(middleLine);
 	}
 	function createBall() {
 	  // console.log(ballStates)
@@ -48126,8 +48163,8 @@ void main() {
 	  const shape = new Shape();
 	  let x = 0;
 	  const y = 0;
-	  const w = 1;
-	  const h = 2.5;
+	  const w = 0.5;
+	  const h = 1.5;
 	  shape.moveTo(x - w / 2, y);
 	  shape.bezierCurveTo(x - w / 2, y, x - w / 4, y + h, x - w / 4, y + h);
 	  shape.bezierCurveTo(x - w / 4, y + h, x, y + h + h * 0.1, x + w / 4, y + h);
@@ -48140,7 +48177,7 @@ void main() {
 
 	  const boatGeo = new ExtrudeGeometry(shape, {
 	    steps: 2,
-	    depth: 0.5,
+	    depth: 0.2,
 	    bevelEnabled: true,
 	    bevelThickness: 0.1,
 	    bevelSize: 0.1,
@@ -48149,10 +48186,10 @@ void main() {
 	  });
 
 	  const mat = new MeshPhongMaterial({
-	    color: state.color,
+	    color: state.color==="#b2e6ce"? "#66cc9d" : "#cc9d66",
 	    precision: "highp",
 	  });
-	  const personCapGeo = new CapsuleGeometry(0.3, 0.6, 1.5);
+	  const personCapGeo = new CapsuleGeometry(0.3, 0.3, 1.5);
 	  personCapGeo.rotateX(-Math.PI / 2);
 	  // const personCap  =new THREE.Mesh(personCapGeo)
 	  // const boatMesh = new THREE.Mesh(boatGeo);
